@@ -160,23 +160,20 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #000;
             font-weight: 700;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             border-radius: 10px;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             transition: var(--transition);
             text-decoration: none;
             display: inline-block;
+            font-size: 1.2rem;
             box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+            margin: 2rem 0;
         }
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 255, 65, 0.4);
-        }
-        .btn-discord {
-            background: linear-gradient(135deg, var(--discord), #4752C4);
-            color: white;
-            margin-top: 1.5rem;
         }
         .course-thumb {
             width: 100%;
@@ -201,14 +198,15 @@
         .tool-button {
             background: rgba(0, 255, 65, 0.1);
             color: var(--light);
-            padding: 1.2rem;
+            padding: 1.4rem;
             border-radius: 10px;
             text-decoration: none;
             display: block;
             transition: var(--transition);
             border: 1px solid rgba(0, 255, 65, 0.2);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
+            cursor: pointer;
         }
         .tool-button:hover {
             background: rgba(0, 255, 65, 0.2);
@@ -216,8 +214,8 @@
             box-shadow: 0 5px 15px rgba(0, 255, 65, 0.25);
         }
         .tool-button i {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
             display: block;
             color: var(--primary);
         }
@@ -253,16 +251,18 @@
             align-items: center;
             z-index: 2000;
             backdrop-filter: blur(8px);
+            padding: 1rem;
         }
         .modal-content {
             background: linear-gradient(145deg, rgba(20, 20, 20, 0.98), rgba(15, 15, 15, 0.98));
             border: 1px solid var(--primary);
             border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
+            max-width: 550px;
+            width: 100%;
             padding: 2.5rem;
             position: relative;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
         .close-modal {
             position: absolute;
@@ -271,13 +271,30 @@
             font-size: 28px;
             cursor: pointer;
             color: var(--light);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: var(--transition);
         }
-        .close-modal:hover { color: var(--primary); }
+        .close-modal:hover {
+            color: var(--primary);
+            background: rgba(0, 255, 65, 0.2);
+            transform: rotate(90deg);
+        }
         .modal-title {
             color: var(--primary);
             font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+        .modal-desc {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -289,6 +306,7 @@
             .container { padding: 1.8rem; }
             .link-card { flex-direction: column; text-align: center; }
             .link-icon { margin-bottom: 1rem; margin-right: 0; }
+            .modal-content { padding: 2rem; }
         }
     </style>
 </head>
@@ -309,17 +327,17 @@
             </a>
         </div>
 
-        <!-- Botón clases particulares -->
-        <a href="https://cal.com/lionxsecurity-gmg0n1/30min" target="_blank" class="btn-primary" style="font-size:1.2rem; padding:1.2rem 2.5rem;">
-            📅 Agendar Clase Particular Gratuita <i class="fas fa-arrow-right"></i>
+        <!-- Botón clases particulares actualizado -->
+        <a href="https://cal.com/lionxsecurity-gmg0n1/30min" target="_blank" class="btn-primary">
+            Clases Particulares (Inserción Laboral) <i class="fas fa-arrow-right"></i>
         </a>
 
         <h3 class="section-title"><i class="fas fa-book-open"></i> Apuntes Gratis</h3>
         <div class="tools-box">
-            <a href="#" class="tool-button" id="freeNotesButton">
+            <div class="tool-button" id="freeNotesButton">
                 <i class="fas fa-book"></i>
                 <span>Recibir Apuntes Exclusivos de Bash Scripting</span>
-            </a>
+            </div>
         </div>
 
         <h3 class="section-title"><i class="fab fa-discord"></i> Comunidad Discord</h3>
@@ -366,16 +384,15 @@
         </div>
     </footer>
 
-    <!-- Modal Apuntes Gratis -->
+    <!-- Modal Apuntes Gratis mejorado y centrado -->
     <div class="modal-overlay" id="apuntesModal">
         <div class="modal-content">
             <span class="close-modal" id="closeApuntesModal">×</span>
-            <h3 class="modal-title">Apuntes Gratis de Bash Scripting</h3>
-            <p style="text-align:center; margin-bottom:2rem; opacity:0.9;">
-                Recibe apuntes exclusivos, scripts útiles y material del curso directamente en tu email.
+            <h3 class="modal-title"><i class="fas fa-book"></i> Apuntes Gratis de Bash Scripting</h3>
+            <p class="modal-desc">
+                Recibe apuntes exclusivos, scripts útiles y material avanzado del curso directamente en tu email.
             </p>
             <div class="eo-form-container">
-                <!-- Reutilizo el formulario original de apuntes (el que antes era de 15% lo reemplazamos por este) -->
                 <script async src="https://eocampaign1.com/form/6678d19e-8b1f-11f0-808e-af63b4293a21.js" data-form="6678d19e-8b1f-11f0-808e-af63b4293a21"></script>
             </div>
         </div>
