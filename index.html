@@ -255,6 +255,242 @@
             transform: translateY(0);
         }
         
+        /* Evento Discord */
+        .event-section {
+            margin: 3rem 0;
+        }
+
+        .event-card {
+            background: linear-gradient(145deg, 
+                rgba(10, 30, 10, 0.9), 
+                rgba(5, 15, 5, 0.95));
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 65, 0.3);
+            border-color: #00ff88;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary), 
+                #00ff88, 
+                var(--primary), 
+                transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(0, 30, 0, 0.7);
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .event-fire {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: #ff3333;
+            text-shadow: 0 0 10px rgba(255, 50, 50, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .event-fire i {
+            font-size: 1.2rem;
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .event-content {
+            padding: 2rem;
+        }
+
+        .event-title {
+            color: #00ff88;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            background: linear-gradient(45deg, #00ff41, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
+            to { text-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 
+                            0 0 30px rgba(0, 255, 136, 0.4); }
+        }
+
+        .event-subtitle {
+            color: var(--light);
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .event-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            transition: var(--transition);
+        }
+
+        .highlight:hover {
+            background: rgba(0, 255, 65, 0.15);
+            transform: translateX(5px);
+        }
+
+        .highlight i {
+            color: var(--primary);
+            font-size: 1.3rem;
+            min-width: 30px;
+        }
+
+        .highlight span {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .event-countdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            border: 1px solid var(--primary);
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+            font-family: 'Courier New', monospace;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--light);
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .countdown-separator {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0 0.5rem;
+        }
+
+        .event-cta {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .event-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--discord), #4752c4);
+            color: white;
+            padding: 1.3rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+            animation: buttonPulse 2s infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 8px 25px rgba(88, 101, 242, 0.6); }
+        }
+
+        .event-button:hover {
+            animation: none;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.7);
+            background: linear-gradient(135deg, #4752c4, var(--discord));
+        }
+
+        .event-button i {
+            font-size: 1.5rem;
+        }
+
+        .event-note {
+            margin-top: 1rem;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
         .tools-box {
             background: linear-gradient(145deg, rgba(26, 26, 26, 0.8), rgba(20, 20, 20, 0.8));
             border: 1px solid var(--primary-light);
@@ -487,6 +723,7 @@
         
         canvas { display: block; }
         
+        /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.8rem; }
             .container { padding: 1.8rem; }
@@ -497,6 +734,30 @@
             .view-course-text {
                 font-size: 1.5rem;
                 padding: 10px 20px;
+            }
+            
+            /* Evento responsive */
+            .event-title {
+                font-size: 1.8rem;
+            }
+            
+            .event-highlights {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-countdown {
+                gap: 0.5rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .event-button {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
             }
             
             /* WhatsApp responsive */
@@ -521,6 +782,32 @@
             
             .image-container:hover {
                 transform: translateY(-5px);
+            }
+            
+            .event-header {
+                flex-direction: column;
+                gap: 0.8rem;
+                text-align: center;
+            }
+            
+            .event-content {
+                padding: 1.5rem;
+            }
+            
+            .event-title {
+                font-size: 1.5rem;
+            }
+            
+            .event-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.8rem;
+            }
+            
+            .countdown-item {
+                min-width: 60px;
             }
         }
     </style>
@@ -552,6 +839,73 @@
             <div class="image-overlay">
                 <div class="view-course-text">
                     VER CURSO
+                </div>
+            </div>
+        </div>
+
+        <!-- Evento Discord - Masterclass -->
+        <div class="event-section">
+            <h3 class="section-title"><i class="fas fa-broadcast-tower"></i> EVENTO ESPECIAL DISCORD</h3>
+            
+            <div class="event-card" onclick="window.open('https://discord.gg/3PxqQTHrvU', '_blank')">
+                <div class="event-header">
+                    <div class="event-fire">
+                        <i class="fas fa-fire"></i>
+                        <span>🔥 EN VIVO</span>
+                    </div>
+                    <div class="event-date">
+                        <i class="far fa-calendar-alt"></i>
+                        Domingo 1 Febrero - 19:00
+                    </div>
+                </div>
+                
+                <div class="event-content">
+                    <h2 class="event-title">MASTERCLASS GRATUITA</h2>
+                    <h3 class="event-subtitle">Bash Scripting para Ciberseguridad REAL</h3>
+                    
+                    <div class="event-highlights">
+                        <div class="highlight">
+                            <i class="fas fa-desktop"></i>
+                            <span>+13 años experiencia profesional</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-code"></i>
+                            <span>Automatización de tarea REAL en directo</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-gift"></i>
+                            <span>Descuentos y sorpresas exclusivas</span>
+                        </div>
+                        <div class="highlight">
+                            <i class="fas fa-users"></i>
+                            <span>Preguntas y respuestas en tiempo real</span>
+                        </div>
+                    </div>
+                    
+                    <div class="event-countdown" id="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-number">00</span>
+                            <span class="countdown-label">DÍAS</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">00</span>
+                            <span class="countdown-label">HORAS</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">00</span>
+                            <span class="countdown-label">MIN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="event-cta">
+                        <div class="event-button">
+                            <i class="fab fa-discord"></i>
+                            CONFIRMAR ASISTENCIA GRATIS
+                        </div>
+                        <p class="event-note">¡Invitamos a un amigo y no te lo pierdas!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -679,6 +1033,33 @@
                 document.body.style.overflow = 'auto';
             }
         });
+
+        // Countdown para el evento
+        function updateCountdown() {
+            const eventDate = new Date('February 1, 2026 19:00:00 GMT+0100').getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = 
+                    '<div class="event-live">🔥 ¡EN DIRECTO AHORA!</div>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.querySelectorAll('.countdown-number')[0].textContent = 
+                days.toString().padStart(2, '0');
+            document.querySelectorAll('.countdown-number')[1].textContent = 
+                hours.toString().padStart(2, '0');
+            document.querySelectorAll('.countdown-number')[2].textContent = 
+                minutes.toString().padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000); // Actualizar cada minuto
 
         // WhatsApp button interaction effects
         const whatsappButton = document.getElementById('whatsappButton');
