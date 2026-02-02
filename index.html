@@ -232,27 +232,6 @@
             transform: scale(1.2) rotate(10deg);
         }
         
-        .btn-tag {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #ff3333;
-            color: white;
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 3px 10px rgba(255, 51, 51, 0.5);
-            animation: pulseTag 1.5s infinite;
-        }
-        
-        @keyframes pulseTag {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
         /* Contenedor de imagen con efecto hover mejorado */
         .image-container {
             position: relative;
@@ -888,13 +867,6 @@
                 text-align: center;
             }
             
-            .btn-tag {
-                font-size: 0.7rem;
-                padding: 3px 8px;
-                top: -8px;
-                right: -8px;
-            }
-            
             .event-header {
                 flex-direction: column;
                 gap: 0.8rem;
@@ -959,7 +931,6 @@
             <a href="https://tally.so/r/81zVNo" target="_blank" class="btn-primary">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Clases Particulares<br><small>Inserción Laboral</small></span>
-                <span class="btn-tag">ALTA DEMANDA</span>
             </a>
         </div>
 
@@ -975,7 +946,7 @@
                     </div>
                     <div class="event-date">
                         <i class="far fa-calendar-alt"></i>
-                        Domingo 1 Febrero - 19:00 (Españolas)
+                        Sábado 1 Marzo - 19:00 (Españolas)
                     </div>
                 </div>
                 
@@ -1149,9 +1120,9 @@
             }
         });
 
-        // Countdown para el evento
+        // Countdown para el evento (actualizado a 1 de marzo)
         function updateCountdown() {
-            const eventDate = new Date('February 1, 2026 19:00:00 GMT+0100').getTime();
+            const eventDate = new Date('March 1, 2026 19:00:00 GMT+0100').getTime();
             const now = new Date().getTime();
             const distance = eventDate - now;
 
