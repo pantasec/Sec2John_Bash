@@ -158,24 +158,99 @@
             opacity: 0.85;
             margin-top: 0.4rem;
         }
+        
+        /* Botón de Clases Particulares con Agenda */
+        .classes-btn-container {
+            margin: 2.5rem 0;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #000;
             font-weight: 700;
-            padding: 1.2rem 2.5rem;
-            border-radius: 10px;
+            padding: 1.5rem 2.5rem;
+            border-radius: 12px;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             transition: var(--transition);
             text-decoration: none;
-            display: inline-block;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
-            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            animation: pulseGlow 2s infinite;
+            max-width: 450px;
+            margin: 0 auto;
         }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+            }
+            50% { 
+                box-shadow: 0 8px 30px 5px rgba(0, 255, 65, 0.5);
+            }
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), #00ff88, var(--primary));
+            border-radius: 14px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 255, 65, 0.4);
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            animation: none;
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
+            animation: rotate 3s linear infinite;
+        }
+        
+        .btn-primary i {
+            font-size: 1.8rem;
+            transition: transform 0.3s;
+        }
+        
+        .btn-primary:hover i {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .btn-tag {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff3333;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 10px rgba(255, 51, 51, 0.5);
+            animation: pulseTag 1.5s infinite;
+        }
+        
+        @keyframes pulseTag {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         /* Contenedor de imagen con efecto hover mejorado */
@@ -721,6 +796,17 @@
             to { opacity: 1; }
         }
         
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         canvas { display: block; }
         
         /* Responsive */
@@ -734,6 +820,16 @@
             .view-course-text {
                 font-size: 1.5rem;
                 padding: 10px 20px;
+            }
+            
+            .btn-primary {
+                padding: 1.2rem 1.8rem;
+                font-size: 1.1rem;
+                gap: 0.8rem;
+            }
+            
+            .btn-primary i {
+                font-size: 1.5rem;
             }
             
             /* Evento responsive */
@@ -782,6 +878,21 @@
             
             .image-container:hover {
                 transform: translateY(-5px);
+            }
+            
+            .btn-primary {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                gap: 0.6rem;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .btn-tag {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+                top: -8px;
+                right: -8px;
             }
             
             .event-header {
@@ -843,11 +954,20 @@
             </div>
         </div>
 
+        <!-- Botón de Clases Particulares con Agenda (NUEVA POSICIÓN) -->
+        <div class="classes-btn-container">
+            <a href="https://tally.so/r/81zVNo" target="_blank" class="btn-primary">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Clases Particulares<br><small>Inserción Laboral</small></span>
+                <span class="btn-tag">ALTA DEMANDA</span>
+            </a>
+        </div>
+
         <!-- Evento Discord - Masterclass -->
         <div class="event-section">
             <h3 class="section-title"><i class="fas fa-broadcast-tower"></i> EVENTO ESPECIAL DISCORD</h3>
             
-            <div class="event-card" onclick="window.open('https://discord.gg/3PxqQTHrvU', '_blank')">
+            <div class="event-card" onclick="window.open('https://discord.gg/KAqAYxS4J5?event=1467858140581335268', '_blank')">
                 <div class="event-header">
                     <div class="event-fire">
                         <i class="fas fa-fire"></i>
@@ -909,11 +1029,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Botón clases particulares actualizado con TALLY -->
-        <a href="https://tally.so/r/81zVNo" target="_blank" class="btn-primary">
-            Clases Particulares (Inserción Laboral) <i class="fas fa-arrow-right"></i>
-        </a>
 
         <h3 class="section-title"><i class="fas fa-book-open"></i> Apuntes Gratis</h3>
         <div class="tools-box">
