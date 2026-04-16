@@ -10,10 +10,13 @@
         :root {
             --primary: #00FF41;
             --primary-light: rgba(0, 255, 65, 0.2);
+            --primary-dark: #00cc33;
             --accent: #00b3ff;
             --dark: #0a0a0a;
             --darker: #050505;
             --light: #f5f5f5;
+            --grey: #1a1a1a;
+            --grey-light: #2a2a2a;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,49 +29,171 @@
             flex-direction: column;
             position: relative;
             overflow-x: hidden;
+            line-height: 1.6;
         }
-        .matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -2; opacity: 0.12; }
-        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E"); pointer-events: none; z-index: -1; }
-
+        .matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.12;
+        }
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
         .container {
             max-width: 780px;
             width: 92%;
             margin: 2.5rem auto;
             padding: 2.8rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            backdrop-filter: blur(10px);
             background: rgba(10, 10, 10, 0.75);
             border-radius: 16px;
             border: 1px solid var(--primary-light);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            text-align: center;
         }
-        h1 { color: var(--primary); font-size: 3.6rem; letter-spacing: 5px; font-weight: 700; text-shadow: 0 0 25px var(--primary); }
-        .tagline { color: var(--accent); font-size: 1.35rem; margin-top: 0.8rem; letter-spacing: 2px; }
-        .penguin { font-size: 2.3rem; }
+        header {
+            margin-bottom: 2.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 3.6rem;
+            margin: 0;
+            letter-spacing: 5px;
+            font-weight: 700;
+            text-shadow: 0 0 25px var(--primary);
+        }
+        .tagline {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.35rem;
+            margin-top: 0.8rem;
+            letter-spacing: 2px;
+        }
+        .penguin {
+            font-size: 2.2rem;
+            margin-left: 8px;
+        }
+        .badge-experience {
+            background: rgba(0, 255, 65, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        .section-title {
+            color: var(--primary);
+            font-size: 1.45rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 2.8rem 0 1.3rem 0;
+            text-align: left;
+            position: relative;
+            padding-left: 25px;
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 75%;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+        .link-card {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(18, 18, 18, 0.95));
+            border: 1px solid var(--grey-light);
+            border-radius: 12px;
+            padding: 1.6rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--light);
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        .link-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 30px rgba(0, 255, 65, 0.35);
+        }
+        .link-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.8rem;
+            border-radius: 12px;
+            background: rgba(0, 255, 65, 0.1);
+            transition: var(--transition);
+        }
+        .link-card:hover .link-icon {
+            background: rgba(0, 255, 65, 0.25);
+            transform: scale(1.12);
+        }
+        .link-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        .link-text { flex: 1; text-align: left; }
+        .link-title {
+            font-weight: 700;
+            font-size: 1.45rem;
+            color: var(--lighter);
+        }
+        .link-desc {
+            font-size: 0.97rem;
+            opacity: 0.85;
+            margin-top: 0.5rem;
+        }
 
+        /* Botón principal WhatsApp */
+        .whatsapp-btn-container {
+            margin: 2.5rem 0;
+        }
         .btn-whatsapp {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
             font-weight: 700;
-            padding: 1.7rem 3rem;
+            padding: 1.6rem 3rem;
             border-radius: 12px;
-            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 1.35rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1rem;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.45);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            transition: var(--transition);
             max-width: 420px;
-            margin: 2.2rem auto;
-            border: 2px solid rgba(255,255,255,0.25);
+            margin: 0 auto;
+            border: 2px solid rgba(255,255,255,0.2);
         }
         .btn-whatsapp:hover {
-            transform: translateY(-6px) scale(1.04);
-            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.7);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+        }
+        .btn-whatsapp i {
+            font-size: 2.2rem;
         }
 
+        /* Imagen principal */
         .image-container {
             position: relative;
             width: 100%;
@@ -77,42 +202,115 @@
             margin: 2rem 0;
             cursor: pointer;
             border: 2px solid var(--primary-light);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
         }
-        .image-container:hover { transform: translateY(-10px); box-shadow: 0 20px 45px rgba(0, 255, 65, 0.4); }
+        .course-thumb {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
         .image-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: 0.4s;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: var(--transition);
         }
-        .image-container:hover .image-overlay { opacity: 1; }
         .view-community-text {
-            font-size: 2.1rem; font-weight: 700; color: var(--primary);
-            padding: 14px 35px; border: 3px solid var(--primary); border-radius: 10px;
-            background: rgba(0,0,0,0.85); letter-spacing: 3px;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 14px 35px;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.85);
+            text-shadow: 0 0 20px var(--primary);
+            transition: all 0.4s ease;
+        }
+        .image-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 255, 65, 0.4);
+            border-color: var(--primary);
+        }
+        .image-container:hover .course-thumb {
+            filter: brightness(0.55) saturate(1.3);
+            transform: scale(1.06);
+        }
+        .image-container:hover .image-overlay {
+            opacity: 1;
+        }
+        .image-container:hover .view-community-text {
+            transform: scale(1.05);
         }
 
-        .benefits {
-            text-align: left;
-            background: rgba(26,26,26,0.9);
-            padding: 2rem;
-            border-radius: 14px;
+        .tools-box {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(18, 18, 18, 0.9));
             border: 1px solid var(--primary-light);
+            border-radius: 14px;
+            padding: 2rem;
             margin: 2rem 0;
         }
-        .benefits ul {
-            list-style: none;
-            padding: 0;
-        }
-        .benefits li {
-            margin: 1.1rem 0;
-            font-size: 1.08rem;
+
+        /* Botón flotante WhatsApp (redondo) */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
         }
 
-        footer { margin-top: auto; padding: 2rem; text-align: center; background: rgba(10,10,10,0.95); border-top: 1px solid var(--primary-light); }
+        footer {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid var(--primary-light);
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .footer-link {
+            color: var(--light);
+            opacity: 0.75;
+            transition: var(--transition);
+        }
+        .footer-link:hover { color: var(--primary); opacity: 1; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.9rem; }
+            .btn-whatsapp { padding: 1.4rem 2rem; font-size: 1.2rem; }
+            .view-community-text { font-size: 1.6rem; padding: 10px 25px; }
+        }
     </style>
 </head>
 <body>
@@ -123,82 +321,107 @@
         <header>
             <h1>SEC2JOHN <span class="penguin">🐧</span></h1>
             <p class="tagline">LINUX PATH → SYSADMIN</p>
-            <div style="margin-top:1rem; background:rgba(0,255,65,0.15); border:1px solid var(--primary); color:var(--primary); padding:0.6rem 1.4rem; border-radius:50px; display:inline-block; font-weight:600;">
-                <i class="fas fa-briefcase"></i> +17 años en sistemas & Linux
+            <div class="badge-experience">
+                <i class="fas fa-briefcase"></i> +17 años en sistemas &amp; Linux
             </div>
         </header>
 
         <!-- Imagen principal -->
-        <div class="image-container" onclick="window.open('https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz', '_blank')">
-            <img src="https://raw.githubusercontent.com/pantasec/Sec2John_Bash/main/B45B1EA4-4FDA-47BC-B637-BBB4A03B5E86.PNG" 
-                 alt="Sec2John - Linux SysAdmin" style="width:100%; display:block;">
+        <div class="image-container" onclick="window.open('https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz', '_blank')" title="Unirte a la Comunidad">
+            <img src="https://raw.githubusercontent.com/pantasec/Sec2John_Bash/main/B45B1EA4-4FDA-47BC-B637-BBB4A03B5E86.PNG"
+                 alt="Sec2John - Linux SysAdmin" class="course-thumb">
+           
             <div class="image-overlay">
-                <div class="view-community-text">UNIRME AL GRUPO</div>
+                <div class="view-community-text">
+                    UNIRME A WHATSAPP
+                </div>
             </div>
         </div>
 
-        <!-- Botón WhatsApp grande -->
-        <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-whatsapp">
-            <i class="fab fa-whatsapp fa-2x"></i>
-            <span>ENTRAR A LA COMUNIDAD DE WHATSAPP</span>
-        </a>
+        <!-- Botón destacado WhatsApp -->
+        <div class="whatsapp-btn-container">
+            <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                <span>ENTRAR A LA COMUNIDAD</span>
+            </a>
+        </div>
 
-        <h3 style="color:var(--primary); margin:2.5rem 0 1.2rem; font-size:1.45rem; text-align:left;">
-            <i class="fas fa-book-open"></i> ¿Qué encontrarás en la comunidad?
-        </h3>
-
-        <div class="benefits">
-            <ul>
-                <li><span style="color:#00FF41; font-size:1.4rem;">🐧</span> <strong>Ruta de aprendizaje clara:</strong> Linux → SysAdmin desde cero</li>
-                <li><span style="color:#00b3ff; font-size:1.4rem;">⚡</span> <strong>Bash scripting avanzado</strong> y automatización profesional</li>
-                <li><span style="color:#ffcc00; font-size:1.4rem;">📅</span> <strong>Evento mensual en directo por YouTube</strong>: aprende en vivo y pregunta todo lo que quieras</li>
-                <li><span style="color:#00ff88; font-size:1.4rem;">📚</span> <strong>Recursos semanales gratuitos</strong> todos los domingos</li>
-                <li><span style="color:#ff66b3; font-size:1.4rem;">💼</span> <strong>Experiencia real, certificaciones y guía de inserción laboral</strong></li>
-                <li><span style="color:#33ccff; font-size:1.4rem;">🛠️</span> <strong>Soporte diario</strong>, dudas resueltas y networking</li>
-                <li><span style="color:#ff8800; font-size:1.4rem;">🔧</span> Distros, GNOME, Fedora, servidores, seguridad y mucho más</li>
+        <h3 class="section-title"><i class="fas fa-book-open"></i> ¿Qué encontrarás?</h3>
+        <div class="tools-box" style="text-align:left; font-size:1.05rem; line-height:1.7;">
+            <p><strong>Comunidad Sec2John</strong> — El camino real para convertirte en SysAdmin desde cero.</p>
+            <ul style="margin-top:1rem; padding-left:1.5rem;">
+                <li>🐧 Ruta de aprendizaje clara: Linux → SysAdmin</li>
+                <li>⚡ Bash scripting avanzado y automatización</li>
+                <li>📺 Evento mensual en directo en YouTube (pregunta lo que quieras)</li>
+                <li>📚 Recursos semanales gratuitos (todos los domingos)</li>
+                <li>💼 Experiencia real, certificaciones y guía de empleo</li>
+                <li>🛟 Soporte diario, dudas resueltas y networking</li>
+                <li>🔧 Distros, GNOME, Fedora, servidores, seguridad...</li>
             </ul>
         </div>
 
-        <h3 style="color:var(--primary); margin:2.5rem 0 1.2rem; font-size:1.45rem; text-align:left;">
-            <i class="fab fa-discord"></i> Comunidad Discord
-        </h3>
-        <a href="https://discord.gg/XtkC4zeukQ" target="_blank" style="text-decoration:none;">
-            <div style="background:linear-gradient(145deg, #1a1a1a, #121212); border:1px solid #2a2a2a; border-radius:12px; padding:1.6rem; display:flex; align-items:center; gap:1.8rem; transition:0.3s;">
-                <div style="width:60px; height:60px; background:rgba(0,255,65,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center;">
-                    <i class="fab fa-discord" style="font-size:2.2rem; color:var(--primary);"></i>
+        <h3 class="section-title"><i class="fab fa-discord"></i> Comunidad Discord</h3>
+        <div class="links">
+            <a href="https://discord.gg/XtkC4zeukQ" target="_blank" class="link-card">
+                <div class="link-icon"><i class="fab fa-discord"></i></div>
+                <div class="link-text">
+                    <p class="link-title">Discord Sec2John</p>
+                    <p class="link-desc">Apuntes, laboratorios, voz y soporte técnico</p>
                 </div>
-                <div style="text-align:left;">
-                    <p style="font-weight:700; font-size:1.45rem;">Discord Sec2John</p>
-                    <p style="opacity:0.85;">Apuntes, laboratorios y soporte técnico</p>
-                </div>
-            </div>
-        </a>
+            </a>
+        </div>
 
-        <div style="margin-top:3rem; text-align:center;">
-            <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-whatsapp" style="max-width:380px; padding:1.4rem 2.5rem; font-size:1.25rem;">
-                <i class="fab fa-whatsapp"></i>
-                UNIRME AHORA AL GRUPO DE WHATSAPP
+        <h3 class="section-title"><i class="fas fa-hashtag"></i> Redes Sociales</h3>
+        <div class="links">
+            <a href="https://www.youtube.com/@sec2john" target="_blank" class="link-card">
+                <div class="link-icon"><i class="fab fa-youtube"></i></div>
+                <div class="link-text">
+                    <p class="link-title">YouTube</p>
+                    <p class="link-desc">Tutoriales Linux y SysAdmin</p>
+                </div>
+            </a>
+            <a href="https://www.tiktok.com/@sec2john" target="_blank" class="link-card">
+                <div class="link-icon"><i class="fab fa-tiktok"></i></div>
+                <div class="link-text">
+                    <p class="link-title">TikTok</p>
+                    <p class="link-desc">Tips rápidos y trucos de terminal</p>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/sec2john/" target="_blank" class="link-card">
+                <div class="link-icon"><i class="fab fa-instagram"></i></div>
+                <div class="link-text">
+                    <p class="link-title">Instagram</p>
+                    <p class="link-desc">Contenido diario y avances</p>
+                </div>
             </a>
         </div>
     </div>
 
     <footer>
-        <p>© Sec2John — Linux Path to SysAdmin 2026</p>
+        <div class="footer-links">
+            <a href="https://privacy.lionxsecurity.es/" class="footer-link" target="_blank">Política de Privacidad</a>
+            <a href="https://legal.lionxsecurity.es/" class="footer-link" target="_blank">Aviso Legal</a>
+        </div>
+        <p style="opacity:0.6; font-size:0.9rem;">© Sec2John — Linux Path to SysAdmin</p>
     </footer>
 
+    <!-- Botón flotante WhatsApp -->
+    <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="whatsapp-float" title="Unirte a WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <script>
-        // Matrix rain effect
+        // Matrix rain
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const chars = '01🐧LINUXBASHROOTFEDORAUBUNTUGNOMESYSADMIN🔧⚡';
+        const chars = '01🐧LINUXBASHROOTFEDORAUBUNTUGNOMESYSADMIN';
         const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
-
         function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00FF41';
             ctx.font = `${fontSize}px monospace`;
