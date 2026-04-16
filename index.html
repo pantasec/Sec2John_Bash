@@ -1,414 +1,970 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sec2John | Linux Path → SysAdmin 🐧</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00FF41; /* Verde Linux */
-            --primary-light: rgba(0, 255, 65, 0.2);
-            --primary-dark: #00cc33;
-            --accent: #00b3ff; /* Azul terminal Linux */
-            --dark: #0a0a0a;
-            --darker: #050505;
-            --light: #f5f5f5;
-            --grey: #1a1a1a;
-            --grey-light: #2a2a2a;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            color: var(--light);
-            font-family: 'IBM Plex Mono', monospace;
-            background: var(--darker);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-        .matrix-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: -2;
-            opacity: 0.12;
-        }
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: -1;
-        }
-        .container {
-            max-width: 780px;
-            width: 92%;
-            margin: 2.5rem auto;
-            padding: 2.8rem;
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 10, 0.75);
-            border-radius: 16px;
-            border: 1px solid var(--primary-light);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-        }
-        header {
-            margin-bottom: 2.5rem;
-            animation: fadeIn 0.8s ease-out;
-        }
-        h1 {
-            color: var(--primary);
-            font-size: 3.6rem;
-            margin: 0;
-            letter-spacing: 5px;
-            font-weight: 700;
-            text-shadow: 0 0 25px var(--primary);
-        }
-        .tagline {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 1.35rem;
-            margin-top: 0.8rem;
-            letter-spacing: 2px;
-        }
-        .penguin {
-            font-size: 2.2rem;
-            margin-left: 8px;
-        }
-        .badge-experience {
-            background: rgba(0, 255, 65, 0.15);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.6rem 1.4rem;
-            border-radius: 50px;
-            display: inline-block;
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
-        .section-title {
-            color: var(--primary);
-            font-size: 1.45rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 2.8rem 0 1.3rem 0;
-            text-align: left;
-            position: relative;
-            padding-left: 25px;
-        }
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            height: 75%;
-            width: 6px;
-            background: linear-gradient(to bottom, var(--primary), var(--accent));
-            border-radius: 3px;
-        }
-        .link-card {
-            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(18, 18, 18, 0.95));
-            border: 1px solid var(--grey-light);
-            border-radius: 12px;
-            padding: 1.6rem;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--light);
-            transition: var(--transition);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-        .link-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--primary);
-            box-shadow: 0 12px 30px rgba(0, 255, 65, 0.35);
-        }
-        .link-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.8rem;
-            border-radius: 12px;
-            background: rgba(0, 255, 65, 0.1);
-            transition: var(--transition);
-        }
-        .link-card:hover .link-icon {
-            background: rgba(0, 255, 65, 0.25);
-            transform: scale(1.12);
-        }
-        .link-icon i {
-            font-size: 2rem;
-            color: var(--primary);
-        }
-        .link-text { flex: 1; text-align: left; }
-        .link-title {
-            font-weight: 700;
-            font-size: 1.45rem;
-            color: var(--lighter);
-        }
-        .link-desc {
-            font-size: 0.97rem;
-            opacity: 0.85;
-            margin-top: 0.5rem;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sec2John | Linux Path → SysAdmin 🐧</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        /* Botón principal WhatsApp */
-        .whatsapp-btn-container {
-            margin: 2.5rem 0;
-        }
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            font-weight: 700;
-            padding: 1.6rem 3rem;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 1.35rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            text-decoration: none;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
-            transition: var(--transition);
-            max-width: 420px;
-            margin: 0 auto;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .btn-whatsapp:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
-        }
-        .btn-whatsapp i {
-            font-size: 2.2rem;
-        }
+  <style>
+    :root {
+      --bg-1: #0b1220;
+      --bg-2: #0f172a;
+      --bg-3: #111827;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-strong: rgba(17, 24, 39, 0.92);
+      --text: #e5eefc;
+      --muted: #9fb0cc;
+      --line: rgba(125, 211, 252, 0.15);
 
-        /* Imagen principal */
-        .image-container {
-            position: relative;
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            margin: 2rem 0;
-            cursor: pointer;
-            border: 2px solid var(--primary-light);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: var(--transition);
-        }
-        .course-thumb {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: var(--transition);
-        }
-        .image-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: var(--transition);
-        }
-        .view-community-text {
-            font-size: 2.1rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            padding: 14px 35px;
-            border: 3px solid var(--primary);
-            border-radius: 10px;
-            background: rgba(0,0,0,0.85);
-            text-shadow: 0 0 20px var(--primary);
-            transition: all 0.4s ease;
-        }
-        .image-container:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 45px rgba(0, 255, 65, 0.4);
-            border-color: var(--primary);
-        }
-        .image-container:hover .course-thumb {
-            filter: brightness(0.55) saturate(1.3);
-            transform: scale(1.06);
-        }
-        .image-container:hover .image-overlay {
-            opacity: 1;
-        }
-        .image-container:hover .view-community-text {
-            transform: scale(1.05);
-        }
+      --primary: #7dd3fc;      /* cyan terminal */
+      --primary-2: #38bdf8;    /* blue-cyan */
+      --accent: #a3e635;       /* linux green */
+      --accent-2: #f59e0b;     /* terminal amber */
+      --whatsapp: #25D366;
 
-        .tools-box {
-            background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(18, 18, 18, 0.9));
-            border: 1px solid var(--primary-light);
-            border-radius: 14px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        footer {
-            background: rgba(10, 10, 10, 0.95);
-            padding: 2rem;
-            text-align: center;
-            margin-top: auto;
-            border-top: 1px solid var(--primary-light);
-        }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        .footer-link {
-            color: var(--light);
-            opacity: 0.75;
-            transition: var(--transition);
-        }
-        .footer-link:hover { color: var(--primary); opacity: 1; }
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      --radius: 18px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes pulse { 0%,100% { box-shadow: 0 10px 30px rgba(0,255,65,0.4); } 50% { box-shadow: 0 15px 40px rgba(0,255,65,0.7); } }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2.9rem; }
-            .btn-whatsapp { padding: 1.4rem 2rem; font-size: 1.2rem; }
-            .view-community-text { font-size: 1.6rem; padding: 10px 25px; }
-        }
-    </style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(163, 230, 53, 0.09), transparent 20%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2) 45%, #0a0f1a 100%);
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.65;
+    }
+
+    /* Background sysadmin / linux style */
+    .grid-overlay,
+    .noise-overlay,
+    .terminal-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .grid-overlay {
+      background-image:
+        linear-gradient(rgba(125, 211, 252, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 211, 252, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at center, black 55%, transparent 100%);
+      opacity: 0.55;
+    }
+
+    .terminal-overlay {
+      z-index: -2;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.025), rgba(255,255,255,0) 3px),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.02) 0px,
+          rgba(255,255,255,0.02) 1px,
+          transparent 2px,
+          transparent 4px
+        );
+      opacity: 0.18;
+    }
+
+    .noise-overlay {
+      z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.25;
+    }
+
+    .container {
+      width: min(980px, 92%);
+      margin: 2.5rem auto;
+      padding: 2rem;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(125, 211, 252, 0.05), transparent 30%),
+        linear-gradient(315deg, rgba(163, 230, 53, 0.05), transparent 30%);
+      pointer-events: none;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 0.7s ease;
+    }
+
+    .terminal-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      color: var(--primary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .terminal-chip .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 5vw, 4.2rem);
+      line-height: 1.05;
+      margin-bottom: 0.7rem;
+      color: #f8fbff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 18px rgba(125, 211, 252, 0.18);
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      max-width: 760px;
+      margin: 0 auto 1rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    .badge.primary {
+      border-color: rgba(125, 211, 252, 0.28);
+      color: var(--primary);
+    }
+
+    .badge.success {
+      border-color: rgba(37, 211, 102, 0.28);
+      color: #8df0b4;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: stretch;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-card,
+    .info-card,
+    .links-card,
+    .highlights-card {
+      background: var(--panel-strong);
+      border: 1px solid rgba(125, 211, 252, 0.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 1rem;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      min-height: 100%;
+      cursor: pointer;
+      transition: var(--transition);
+      background: #0b1220;
+    }
+
+    .image-container:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(37, 211, 102, 0.14);
+      border-color: rgba(37, 211, 102, 0.45);
+    }
+
+    .course-thumb {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: var(--transition);
+      filter: saturate(1.02) contrast(1.03) brightness(0.92);
+    }
+
+    .image-container:hover .course-thumb {
+      transform: scale(1.03);
+      filter: saturate(1.05) contrast(1.08) brightness(0.55);
+    }
+
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(11, 18, 32, 0.12), rgba(11, 18, 32, 0.82)),
+        radial-gradient(circle at center, rgba(37, 211, 102, 0.14), transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      text-align: center;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .image-container:hover .image-overlay {
+      opacity: 1;
+    }
+
+    .view-course-text {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 0.9rem 1.4rem;
+      border-radius: 12px;
+      background: rgba(37, 211, 102, 0.16);
+      border: 1px solid rgba(37, 211, 102, 0.45);
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.16);
+      transform: translateY(18px);
+      transition: all 0.45s ease 0.15s;
+    }
+
+    .image-container:hover .view-course-text {
+      transform: translateY(0);
+    }
+
+    .info-card {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .mini-label {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-title {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      line-height: 1.18;
+      margin-bottom: 1rem;
+    }
+
+    .hero-copy {
+      color: var(--muted);
+      margin-bottom: 1.3rem;
+      font-size: 0.98rem;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      text-decoration: none;
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      font-weight: 700;
+      transition: var(--transition);
+      text-align: center;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--whatsapp), #1fb655);
+      color: white;
+      box-shadow: 0 10px 28px rgba(37, 211, 102, 0.24);
+      font-size: 1.05rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(37, 211, 102, 0.32);
+    }
+
+    .btn-secondary {
+      background: rgba(125, 211, 252, 0.08);
+      border-color: rgba(125, 211, 252, 0.18);
+      color: var(--primary);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      background: rgba(125, 211, 252, 0.14);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+      margin-top: 1.4rem;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.15rem;
+      color: white;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .section-title {
+      color: #f8fbff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.2rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-title i {
+      color: var(--primary);
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(125, 211, 252, 0.35), transparent);
+    }
+
+    .highlights-card {
+      padding: 1.4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .highlight-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .highlight-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 1rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      transition: var(--transition);
+    }
+
+    .highlight-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(125, 211, 252, 0.2);
+    }
+
+    .highlight-icon {
+      min-width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(125, 211, 252, 0.08);
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .highlight-item h4 {
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+      color: #fff;
+    }
+
+    .highlight-item p {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .tools-box,
+    .links-card {
+      padding: 1.4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tool-button {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(37, 211, 102, 0.08));
+      color: #f8fbff;
+      padding: 1.2rem;
+      border-radius: 14px;
+      text-decoration: none;
+      display: block;
+      transition: var(--transition);
+      border: 1px solid rgba(37, 211, 102, 0.18);
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tool-button:hover {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.18), rgba(37, 211, 102, 0.1));
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.16);
+    }
+
+    .tool-button i {
+      display: block;
+      font-size: 2rem;
+      color: var(--whatsapp);
+      margin-bottom: 0.7rem;
+    }
+
+    .links {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .link-card {
+      background: linear-gradient(145deg, rgba(17, 24, 39, 0.95), rgba(11, 18, 32, 0.95));
+      border: 1px solid rgba(125, 211, 252, 0.1);
+      border-radius: 16px;
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    .link-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(125, 211, 252, 0.28);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .link-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(125, 211, 252, 0.08);
+      color: var(--primary);
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .link-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .link-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .link-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 0.2rem;
+    }
+
+    footer {
+      width: min(980px, 92%);
+      margin: 0 auto 2rem;
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(125, 211, 252, 0.1);
+      border-radius: 18px;
+      padding: 1.2rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--muted);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-link:hover {
+      color: var(--primary);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 10, 20, 0.84);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+    }
+
+    .modal-content {
+      width: min(580px, 100%);
+      background: linear-gradient(145deg, rgba(17, 24, 39, 0.98), rgba(11, 18, 32, 0.98));
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      color: white;
+      cursor: pointer;
+      font-size: 1.4rem;
+      transition: var(--transition);
+    }
+
+    .close-modal:hover {
+      color: var(--primary);
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      font-size: 1.55rem;
+      color: #fff;
+      margin-bottom: 0.8rem;
+    }
+
+    .modal-desc {
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+    }
+
+    .whatsapp-cta-box {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(37, 211, 102, 0.03));
+      border: 1px solid rgba(37, 211, 102, 0.2);
+      border-radius: 16px;
+      padding: 1.2rem;
+    }
+
+    .whatsapp-cta-box .btn-primary {
+      width: 100%;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .highlight-list,
+      .social-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.2rem;
+        margin-top: 1.2rem;
+      }
+
+      h1 {
+        letter-spacing: 1px;
+      }
+
+      .badge-row {
+        gap: 0.6rem;
+      }
+
+      .link-card {
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrix"></canvas>
-    <div class="noise-overlay"></div>
+  <div class="grid-overlay"></div>
+  <div class="terminal-overlay"></div>
+  <div class="noise-overlay"></div>
 
-    <div class="container">
-        <header>
-            <h1>SEC2JOHN <span class="penguin">🐧</span></h1>
-            <p class="tagline">LINUX PATH → SYSADMIN</p>
-            <div class="badge-experience">
-                <i class="fas fa-briefcase"></i> +17 años en sistemas &amp; Linux
-            </div>
-        </header>
+  <div class="container">
+    <header>
+      <div class="terminal-chip">
+        <span class="dot"></span>
+        <span>linux-path@sec2john:~$ join whatsapp-community</span>
+      </div>
 
-        <!-- Imagen principal -->
-        <div class="image-container" onclick="window.open('https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz', '_blank')" title="Unirte a la Comunidad">
-            <img src="https://raw.githubusercontent.com/pantasec/Sec2John_Bash/main/B45B1EA4-4FDA-47BC-B637-BBB4A03B5E86.PNG" 
-                 alt="Sec2John - Linux SysAdmin" class="course-thumb">
-            
-            <div class="image-overlay">
-                <div class="view-community-text">
-                    UNIRME A WHATSAPP
-                </div>
-            </div>
+      <h1>
+        <span class="gradient-text">Linux Path → SysAdmin 🐧</span>
+      </h1>
+
+      <p class="tagline">
+        Comunidad práctica para aprender Linux, sistemas, bash scripting y orientación real para convertirte en SysAdmin desde 0.
+      </p>
+
+      <div class="badge-row">
+        <div class="badge primary"><i class="fas fa-server"></i> +17 años en sistemas</div>
+        <div class="badge"><i class="fab fa-linux"></i> Linux real y aplicado</div>
+        <div class="badge success"><i class="fab fa-whatsapp"></i> Comunidad activa</div>
+      </div>
+    </header>
+
+    <section class="hero-grid">
+      <div class="hero-card">
+        <a class="image-container" href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" title="Entrar a la comunidad de WhatsApp">
+          <img
+            src="https://github.com/pantasec/Sec2John_Bash/blob/main/B45B1EA4-4FDA-47BC-B637-BBB4A03B5E86.PNG?raw=true"
+            alt="Linux Path - Comunidad SysAdmin de Sec2John"
+            class="course-thumb"
+          />
+          <div class="image-overlay">
+            <div class="view-course-text">COMUNIDAD DE WHATSAPP</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="info-card">
+        <div class="mini-label">Ruta definitiva para empezar en sistemas</div>
+        <h2 class="hero-title">
+          Aprende Linux, practica de verdad y <span class="gradient-text">acércate a tu primer empleo IT</span>
+        </h2>
+
+        <p class="hero-copy">
+          Si te gusta trastear con terminal, automatizar con Bash, entender distros y construir una base sólida en sistemas, esta comunidad está pensada para ti.
+        </p>
+
+        <div class="cta-group">
+          <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-primary">
+            <i class="fab fa-whatsapp"></i>
+            <span>Unirme ahora a la comunidad</span>
+          </a>
+
+          <a href="#contenido" class="btn-secondary">
+            <i class="fas fa-terminal"></i>
+            <span>Ver qué encontrarás dentro</span>
+          </a>
         </div>
 
-        <!-- Botón destacado WhatsApp -->
-        <div class="whatsapp-btn-container">
-            <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-whatsapp">
-                <i class="fab fa-whatsapp"></i>
-                <span>ENTRAR A LA COMUNIDAD</span>
-            </a>
+        <div class="stats">
+          <div class="stat">
+            <strong>Linux</strong>
+            <span>base sólida desde 0</span>
+          </div>
+          <div class="stat">
+            <strong>SysAdmin</strong>
+            <span>ruta clara y práctica</span>
+          </div>
+          <div class="stat">
+            <strong>Empleo</strong>
+            <span>orientación realista</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h3 class="section-title" id="contenido">
+      <i class="fas fa-folder-tree"></i>
+      Qué encontrarás en la comunidad
+    </h3>
+
+    <section class="highlights-card">
+      <div class="highlight-list">
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-road"></i></div>
+          <div>
+            <h4>Ruta clara hacia SysAdmin</h4>
+            <p>Guía definitiva para convertirte en SysAdmin desde 0, con enfoque práctico y experiencia real en Linux.</p>
+          </div>
         </div>
 
-        <h3 class="section-title"><i class="fas fa-book-open"></i> ¿Qué encontrarás?</h3>
-        <div class="tools-box" style="text-align:left; font-size:1.05rem; line-height:1.7;">
-            <p><strong>Comunidad Sec2John</strong> — El camino real para convertirte en SysAdmin desde cero.</p>
-            <ul style="margin-top:1rem; padding-left:1.5rem;">
-                <li>✅ Ruta de aprendizaje clara: Linux → SysAdmin</li>
-                <li>✅ Bash scripting avanzado y automatización</li>
-                <li>✅ Recursos semanales gratuitos (todos los domingos)</li>
-                <li>✅ Experiencia real, certificaciones y guía de empleo</li>
-                <li>✅ Soporte diario, dudas resueltas y networking</li>
-                <li>✅ Distros, GNOME, Fedora, servidores, seguridad...</li>
-            </ul>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fab fa-linux"></i></div>
+          <div>
+            <h4>Linux y distros</h4>
+            <p>Aprende sobre distros, entornos como GNOME, herramientas y cómo elegir la opción que mejor encaja contigo.</p>
+          </div>
         </div>
 
-        <h3 class="section-title"><i class="fab fa-discord"></i> Comunidad Discord</h3>
-        <div class="links">
-            <a href="https://discord.gg/XtkC4zeukQ" target="_blank" class="link-card">
-                <div class="link-icon"><i class="fab fa-discord"></i></div>
-                <div class="link-text">
-                    <p class="link-title">Discord Sec2John</p>
-                    <p class="link-desc">Apuntes, laboratorios, voz y soporte técnico</p>
-                </div>
-            </a>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-bolt"></i></div>
+          <div>
+            <h4>Bash scripting real</h4>
+            <p>Recursos, scripts, automatización y práctica para quienes disfrutan la terminal y quieren dominar Bash.</p>
+          </div>
         </div>
 
-        <h3 class="section-title"><i class="fas fa-hashtag"></i> Redes Sociales</h3>
-        <div class="links">
-            <a href="https://www.youtube.com/@sec2john" target="_blank" class="link-card">
-                <div class="link-icon"><i class="fab fa-youtube"></i></div>
-                <div class="link-text">
-                    <p class="link-title">YouTube</p>
-                    <p class="link-desc">Tutoriales Linux y SysAdmin</p>
-                </div>
-            </a>
-            <a href="https://www.tiktok.com/@sec2john" target="_blank" class="link-card">
-                <div class="link-icon"><i class="fab fa-tiktok"></i></div>
-                <div class="link-text">
-                    <p class="link-title">TikTok</p>
-                    <p class="link-desc">Tips rápidos y trucos de terminal</p>
-                </div>
-            </a>
-            <a href="https://www.instagram.com/sec2john/" target="_blank" class="link-card">
-                <div class="link-icon"><i class="fab fa-instagram"></i></div>
-                <div class="link-text">
-                    <p class="link-title">Instagram</p>
-                    <p class="link-desc">Contenido diario y avances</p>
-                </div>
-            </a>
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-gift"></i></div>
+          <div>
+            <h4>Recursos gratuitos cada domingo</h4>
+            <p>Material gratuito semanal para que avances poco a poco y construyas una base técnica potente.</p>
+          </div>
         </div>
+
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <h4>Comunidad que aporta</h4>
+            <p>No solo aprendes del contenido: también de lo que comparte la comunidad, dudas, recursos y aportes reales.</p>
+          </div>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-icon"><i class="fas fa-briefcase"></i></div>
+          <div>
+            <h4>Orientación laboral</h4>
+            <p>Práctica, certificación y enfoque hacia inserción laboral en sistemas, Linux y entornos IT.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h3 class="section-title">
+      <i class="fab fa-whatsapp"></i>
+      Acceso directo a la comunidad
+    </h3>
+
+    <div class="tools-box">
+      <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="tool-button">
+        <i class="fab fa-whatsapp"></i>
+        <span>Entrar en la Comunidad Linux Path → SysAdmin 🐧</span>
+      </a>
     </div>
 
-    <footer>
-        <div class="footer-links">
-            <a href="https://privacy.lionxsecurity.es/" class="footer-link" target="_blank">Política de Privacidad</a>
-            <a href="https://legal.lionxsecurity.es/" class="footer-link" target="_blank">Aviso Legal</a>
+    <h3 class="section-title">
+      <i class="fas fa-book-open"></i>
+      Recursos y apuntes gratis
+    </h3>
+
+    <div class="tools-box">
+      <div class="tool-button" id="freeNotesButton">
+        <i class="fas fa-book"></i>
+        <span>Recibir recursos exclusivos de Linux, Bash y SysAdmin</span>
+      </div>
+    </div>
+
+    <h3 class="section-title">
+      <i class="fab fa-discord"></i>
+      Comunidad Discord
+    </h3>
+
+    <div class="links-card">
+      <div class="links">
+        <a href="https://discord.gg/XtkC4zeukQ" target="_blank" class="link-card">
+          <div class="link-icon"><i class="fab fa-discord"></i></div>
+          <div class="link-text">
+            <p class="link-title">Discord Sec2John</p>
+            <p class="link-desc">Dudas, recursos, apuntes y comunidad técnica activa</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <h3 class="section-title">
+      <i class="fas fa-hashtag"></i>
+      Redes sociales
+    </h3>
+
+    <div class="social-grid">
+      <a href="https://www.youtube.com/@sec2john" target="_blank" class="link-card">
+        <div class="link-icon"><i class="fab fa-youtube"></i></div>
+        <div class="link-text">
+          <p class="link-title">YouTube</p>
+          <p class="link-desc">Tutoriales, clases y contenido técnico</p>
         </div>
-        <p style="opacity:0.6; font-size:0.9rem;">© Sec2John — Linux Path to SysAdmin</p>
-    </footer>
+      </a>
 
-    <script>
-        // Matrix rain
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const chars = '01🐧LINUXBASHROOTFEDORAUBUNTUGNOMESYSADMIN';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+      <a href="https://www.tiktok.com/@sec2john" target="_blank" class="link-card">
+        <div class="link-icon"><i class="fab fa-tiktok"></i></div>
+        <div class="link-text">
+          <p class="link-title">TikTok</p>
+          <p class="link-desc">Tips rápidos de Linux, scripting y sistemas</p>
+        </div>
+      </a>
 
-        function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00FF41';
-            ctx.font = `${fontSize}px monospace`;
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(draw, 35);
+      <a href="https://www.instagram.com/sec2john/" target="_blank" class="link-card">
+        <div class="link-icon"><i class="fab fa-instagram"></i></div>
+        <div class="link-text">
+          <p class="link-title">Instagram</p>
+          <p class="link-desc">Actualizaciones, contenido diario y novedades</p>
+        </div>
+      </a>
+    </div>
+  </div>
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
+  <footer>
+    <div class="footer-links">
+      <a href="https://privacy.lionxsecurity.es/" class="footer-link" target="_blank">Política de Privacidad</a>
+      <a href="https://legal.lionxsecurity.es/" class="footer-link" target="_blank">Aviso Legal</a>
+    </div>
+  </footer>
+
+  <!-- Modal recursos gratis -->
+  <div class="modal-overlay" id="apuntesModal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeApuntesModal">×</span>
+      <h3 class="modal-title"><i class="fas fa-book"></i> Recursos gratis de Linux y SysAdmin</h3>
+      <p class="modal-desc">
+        Recibe apuntes, scripts, recursos de Linux, automatización y material útil para avanzar hacia SysAdmin.
+      </p>
+
+      <div class="eo-form-container">
+        <script async src="https://eocampaign1.com/form/6678d19e-8b1f-11f0-808e-af63b4293a21.js" data-form="6678d19e-8b1f-11f0-808e-af63b4293a21"></script>
+      </div>
+
+      <div style="height: 1rem;"></div>
+
+      <div class="whatsapp-cta-box">
+        <a href="https://chat.whatsapp.com/CJYbSY9MT8f7J3IMgvOCKz" target="_blank" class="btn-primary">
+          <i class="fab fa-whatsapp"></i>
+          <span>Ir también a la comunidad</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const freeNotesButton = document.getElementById('freeNotesButton');
+    const apuntesModal = document.getElementById('apuntesModal');
+    const closeApuntesModal = document.getElementById('closeApuntesModal');
+
+    freeNotesButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      apuntesModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeApuntesModal.addEventListener('click', () => {
+      apuntesModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    });
+
+    apuntesModal.addEventListener('click', (e) => {
+      if (e.target === apuntesModal) {
+        apuntesModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
 </body>
 </html>
